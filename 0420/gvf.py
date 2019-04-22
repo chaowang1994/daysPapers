@@ -22,7 +22,7 @@ def gradient_vector_flow(fx, fy, mu, dx=1.0, dy=1.0, verbose=True):
     u'''calc gradient vector flow of input gradient field fx, fy'''
     # calc some coefficients.
     b = fx**2.0 + fy**2.0
-    c1, c2 = b*fx, b*fy
+    c1, c2 = b*fx, b*fy  #  公式15a,b附近
     # calc dt from scaling parameter r.
     r = 0.25 # (17) r < 1/4 required for convergence.
     dt = dx*dy/(r*mu)
@@ -44,6 +44,10 @@ def gradient_vector_flow(fx, fy, mu, dx=1.0, dy=1.0, verbose=True):
             sys.stdout.flush()
     if verbose:
         sys.stdout.write('\n')
+    print(type(curr_u))
+    print(curr_u)
+    print(curr_u.shape)
+    
     return curr_u, curr_v
 
 def edge_map(img, sigma):
@@ -91,7 +95,7 @@ if __name__=='__main__':
         ax.imshow(img, cmap='gray')
         # vy shold be inversed (top=+Y -> top=-Y)
         ax.quiver(X, Y, vx[Y, X], -vy[Y, X], scale=scale, color='blue', headwidth=5)
-    def vmin(values): return -max(values.max(), -values.min())
+    def vmin(values): 0 -max(values.max(), -values.min())
     def vmax(values): return max(values.max(), -values.min())
     fig, axs = plt.subplots(2, 4, figsize=(16, 8))
     fig.suptitle('Gradient Vector Flow (2D) demo')
@@ -104,6 +108,7 @@ if __name__=='__main__':
     ax = axs[1][2]; plot_vector_field(ax, fx, fy); ax.set_title('f')
     ax = axs[1][3]; plot_vector_field(ax, gx, gy); ax.set_title('GVF')
     fig.tight_layout()
+    
     fig, axs = plt.subplots(1, 2, figsize=(12, 8))
     fig.suptitle('Gradient Vector Flow (2D) demo')
     ax = axs[0]; plot_vector_field(ax, fx, fy); ax.set_title('f')
